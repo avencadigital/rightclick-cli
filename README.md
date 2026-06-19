@@ -20,7 +20,7 @@ A Windows context menu integration for popular LLM command-line tools. Right-cli
   - [Codex CLI](https://developers.openai.com/codex/cli/) - Codex CLI
   - [Droid](https://factory.ai/) - Droid by Factory
   - [Gemini CLI](https://github.com/google-gemini/gemini-cli) - Google's Gemini CLI
-  - [GLM - (Claude Code)](https://z.ai/subscribe?ic=DLZMYQBGJY) - Claude Code using GLM API (glm-5.1)
+  - [GLM - (Claude Code)](https://z.ai/subscribe?ic=DLZMYQBGJY) - Claude Code using GLM API (glm-5.2)
   - [Kilo](https://kilo.ai/cli) - Kilo AI CLI
   - [Opencode](https://github.com/anomalyco/opencode) - Open source AI coding assistant
   - [Qwen](https://github.com/QwenLM/Qwen) - Alibaba's Qwen CLI
@@ -153,7 +153,7 @@ When you select **Claude Code (GLM)** during installation, the installer will pr
 |-----------|-------------|---------|
 | **API Token** | Your GLM API authentication token | *(required)* |
 | **Base URL** | The GLM-compatible API endpoint | `https://api.z.ai/api/anthropic` |
-| **Model** | The model name to use | `glm-5.1` |
+| **Model** | The model name to use | `glm-5.2` |
 | **Timeout** | Request timeout in milliseconds | `3000000` |
 
 These values are stored locally in `%USERPROFILE%\.llm-cli\claude-glm.cmd` and are **never committed to the repository**. Each user provides their own credentials during installation.
@@ -176,9 +176,9 @@ The default generated file looks like this:
 set ANTHROPIC_AUTH_TOKEN=your-api-token
 set ANTHROPIC_BASE_URL=https://api.z.ai/api/anthropic
 set API_TIMEOUT_MS=3000000
-set ANTHROPIC_DEFAULT_OPUS_MODEL=glm-5.1
-set ANTHROPIC_DEFAULT_HAIKU_MODEL=glm-5.1
-set ANTHROPIC_DEFAULT_SONNET_MODEL=glm-5.1
+set ANTHROPIC_DEFAULT_OPUS_MODEL=glm-5.2
+set ANTHROPIC_DEFAULT_HAIKU_MODEL=glm-5.2
+set ANTHROPIC_DEFAULT_SONNET_MODEL=glm-5.2
 claude
 ```
 
@@ -189,9 +189,9 @@ You can add any additional `set` lines before the `claude` command to enable exp
 set ANTHROPIC_AUTH_TOKEN=your-api-token
 set ANTHROPIC_BASE_URL=https://api.z.ai/api/anthropic
 set API_TIMEOUT_MS=3000000
-set ANTHROPIC_DEFAULT_OPUS_MODEL=glm-5.1
-set ANTHROPIC_DEFAULT_HAIKU_MODEL=glm-5.1
-set ANTHROPIC_DEFAULT_SONNET_MODEL=glm-5.1
+set ANTHROPIC_DEFAULT_OPUS_MODEL=glm-5.2
+set ANTHROPIC_DEFAULT_HAIKU_MODEL=glm-5.2
+set ANTHROPIC_DEFAULT_SONNET_MODEL=glm-5.2
 set CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
 claude
 ```

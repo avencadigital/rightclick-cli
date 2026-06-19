@@ -69,8 +69,8 @@ if errorlevel 2 (
     set /p "GLM_BASE_URL=         Base URL -> https://api.z.ai/api/anthropic (Press Enter to keep default): "
     if "!GLM_BASE_URL!"=="" set "GLM_BASE_URL=https://api.z.ai/api/anthropic"
     set "GLM_MODEL="
-    set /p "GLM_MODEL=         Model (Press Enter => glm-5.1): "
-    if "!GLM_MODEL!"=="" set "GLM_MODEL=glm-5.1"
+    set /p "GLM_MODEL=         Model (Press Enter => glm-5.2): "
+    if "!GLM_MODEL!"=="" set "GLM_MODEL=glm-5.2"
     set "GLM_TIMEOUT=3000000"
     echo.
     echo         [OK] GLM configured
