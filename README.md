@@ -1,6 +1,6 @@
 # RightClick CLI | Windows context menu launcher for AI coding CLIs
 
-A Windows context menu integration for popular LLM command-line tools. Right-click on any folder to quickly launch your favorite AI assistants. Claude Code, Opencode, Codebuff, Antigravity CLI, Kilo Code CLI, Qwen Code, GLM, Droid, OpenAI Codex
+A Windows context menu integration for popular LLM command-line tools. Right-click on any folder to quickly launch your favorite AI assistants. Claude Code, Claude Code (Custom), Opencode, Codebuff, Antigravity CLI, Kilo Code CLI, Qwen Code, Droid, OpenAI Codex
 
 
 ![RightClick CLI Installer](llm-cli-rc.png)
@@ -20,7 +20,7 @@ A Windows context menu integration for popular LLM command-line tools. Right-cli
   - [Codex CLI](https://developers.openai.com/codex/cli/) - Codex CLI
   - [Droid](https://factory.ai/) - Droid by Factory
   - [Antigravity CLI](https://github.com/google-gemini/antigravity-cli) - Google's Antigravity CLI (`agy`)
-  - [GLM - (Claude Code)](https://z.ai/subscribe?ic=DLZMYQBGJY) - Claude Code using GLM API (glm-5.2)
+  - [Claude Code (Custom)](https://z.ai/subscribe?ic=DLZMYQBGJY) - Claude Code pointed at any Anthropic-compatible API (defaults to GLM, `glm-5.2`)
   - [Kilo](https://kilo.ai/cli) - Kilo AI CLI
   - [Opencode](https://github.com/anomalyco/opencode) - Open source AI coding assistant
   - [Qwen](https://github.com/QwenLM/Qwen) - Alibaba's Qwen CLI
@@ -58,7 +58,7 @@ Ensure the CLI tools are available in your system PATH by testing them in a term
 |------|-----------------|
 | Claude Code (PowerShell) | `irm https://claude.ai/install.ps1 \| iex` |
 | Claude Code (CMD) | `curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd` |
-| GLM (Claude Code) | Same as Claude Code |
+| Claude Code (Custom) | Same as Claude Code |
 | Antigravity CLI (PowerShell) | `irm https://antigravity.google/cli/install.ps1 \| iex` |
 | Qwen | `npm install -g @qwen-code/qwen-code@latest` |
 | Droid | `npm install -g droid` |
@@ -82,7 +82,7 @@ During installation, you'll be asked to select which **context menu entries** to
 1. **[Claude Code](https://github.com/anthropics/claude-code)** - Adds two menu options:
    - **Claude Code** - Safe mode with permission prompts
    - **Claude Code (Yolo)** - Skips all permission prompts (use with caution)
-2. **[GLM - (Claude Code)](https://z.ai/subscribe?ic=DLZMYQBGJY)** - Runs Claude Code using a GLM-compatible API (you'll be prompted for credentials during install — see [GLM Configuration](#glm-configuration))
+2. **[Claude Code (Custom)](https://z.ai/subscribe?ic=DLZMYQBGJY)** - Runs Claude Code against any Anthropic-compatible API. You pick the display name during install (defaults to "Custom") and are prompted for credentials — see [Custom Configuration](#custom-configuration). Also installs the `ccc` terminal command (see [Launching from the terminal](#launching-claude-code-custom-from-the-terminal)).
 3. **[Antigravity CLI](https://github.com/google-gemini/antigravity-cli)** - Google's Antigravity CLI (`agy`)
 4. **[Qwen](https://github.com/QwenLM/Qwen)** - Alibaba's Qwen CLI
 5. **[Droid](https://factory.ai/)** - AI coding assistant
@@ -105,6 +105,29 @@ After installation:
 
 You can also right-click on an **empty area** inside any folder to get the same menu.
 
+### Launching Claude Code (Custom) from the terminal
+
+The context menu is handy, but sometimes you just want a command. When you install **Claude Code (Custom)**, the installer also registers a `ccc` command (**C**laude **C**ode **C**ustom) so you can launch it directly from any terminal (cmd, PowerShell, Windows Terminal):
+
+```bat
+ccc
+```
+
+Any extra arguments are forwarded to Claude Code, so these work too:
+
+```bat
+ccc --resume
+ccc --dangerously-skip-permissions
+ccc -p "explain this folder"
+```
+
+This works because the installer:
+
+1. Creates `%USERPROFILE%\.llm-cli\ccc.cmd`, a thin launcher that calls `claude-custom.cmd` (so your credentials live in exactly one place).
+2. Adds `%USERPROFILE%\.llm-cli` to your **user PATH** (idempotently — it won't add a duplicate entry).
+
+Open a **new** terminal after installing for the command to become available. `ccc` is removed automatically when you run `uninstall.bat` (which also cleans up the PATH entry).
+
 ## Uninstallation
 
 Run `uninstall.bat` to:
@@ -123,7 +146,7 @@ Run `uninstall.bat` to:
 ├── assets/               # Icon files
 │   ├── cli.ico           # Main menu icon
 │   ├── claude.ico        # Claude Code icon
-│   ├── claudeglm.ico    # Claude Code (GLM) icon
+│   ├── claudecustom.ico # Claude Code (Custom) icon
 │   ├── antigravity.ico  # Antigravity CLI icon
 │   ├── qwen.ico          # Qwen icon
 │   ├── droid.ico         # Droid icon
@@ -141,28 +164,34 @@ Run `uninstall.bat` to:
 The installer creates files in `%USERPROFILE%\.llm-cli\`:
 
 - `assets/` - Copied icon files
-- `claude-glm.cmd` - Generated script with GLM credentials (only if GLM is selected)
+- `claude-custom.cmd` - Generated script with your custom credentials (only if Custom is selected)
+- `ccc.cmd` - Terminal launcher for Claude Code (Custom) — see [Launching from the terminal](#launching-claude-code-custom-from-the-terminal) (only if Custom is selected)
 
 > **Note:** Installation does not require administrator privileges. Registry entries are created in user scope (`HKEY_CURRENT_USER`).
 
-### GLM Configuration
+### Custom Configuration
 
-When you select **Claude Code (GLM)** during installation, the installer will prompt you for:
+When you select **Claude Code (Custom)** during installation, the installer first asks how the entry should be labelled, then prompts for the API details:
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| **API Token** | Your GLM API authentication token | *(required)* |
-| **Base URL** | The GLM-compatible API endpoint | `https://api.z.ai/api/anthropic` |
+| **Display name** | Label shown in the context menu, as `Claude Code (<name>)` | `Custom` |
+| **API Token** | Your API authentication token | *(required)* |
+| **Base URL** | The Anthropic-compatible API endpoint | `https://api.z.ai/api/anthropic` |
 | **Model** | The model name to use | `glm-5.2` |
 | **Timeout** | Request timeout in milliseconds | `3000000` |
 
-These values are stored locally in `%USERPROFILE%\.llm-cli\claude-glm.cmd` and are **never committed to the repository**. Each user provides their own credentials during installation.
+The defaults point at the [GLM](https://z.ai/subscribe?ic=DLZMYQBGJY) API, but any Anthropic-compatible endpoint works — just override the Base URL and Model.
 
-To update your GLM credentials, simply re-run `install.bat` and select the GLM option again.
+These values are stored locally in `%USERPROFILE%\.llm-cli\claude-custom.cmd` and are **never committed to the repository**. Each user provides their own credentials during installation.
 
-### Editing the GLM Script Manually
+> **Note:** The display name only affects the menu label and log output. The generated file is always `claude-custom.cmd` and the terminal command is always `ccc`, so reinstalling under a different name leaves no stale entries behind (the installer cleans up the previous ones).
 
-You can also edit the generated file directly at `%USERPROFILE%\.llm-cli\claude-glm.cmd` without re-running the installer. This is useful for:
+To update your credentials, simply re-run `install.bat` and select the Claude Code (Custom) option again.
+
+### Editing the Custom Script Manually
+
+You can also edit the generated file directly at `%USERPROFILE%\.llm-cli\claude-custom.cmd` without re-running the installer. This is useful for:
 
 - Changing the **API Key** (`ANTHROPIC_AUTH_TOKEN`)
 - Switching the **model** (`ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL`)
@@ -179,7 +208,7 @@ set API_TIMEOUT_MS=3000000
 set ANTHROPIC_DEFAULT_OPUS_MODEL=glm-5.2
 set ANTHROPIC_DEFAULT_HAIKU_MODEL=glm-5.2
 set ANTHROPIC_DEFAULT_SONNET_MODEL=glm-5.2
-claude
+claude %*
 ```
 
 You can add any additional `set` lines before the `claude` command to enable experimental features or pass custom configuration. For example, to enable Agent Teams:
@@ -193,10 +222,10 @@ set ANTHROPIC_DEFAULT_OPUS_MODEL=glm-5.2
 set ANTHROPIC_DEFAULT_HAIKU_MODEL=glm-5.2
 set ANTHROPIC_DEFAULT_SONNET_MODEL=glm-5.2
 set CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
-claude
+claude %*
 ```
 
-Any environment variable supported by Claude Code can be added this way. Changes take effect the next time you launch Claude Code (GLM) from the context menu.
+Any environment variable supported by Claude Code can be added this way. Changes take effect the next time you launch Claude Code (Custom) — from the context menu or by typing `ccc`.
 
 ## Security Note
 
